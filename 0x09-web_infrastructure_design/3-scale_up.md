@@ -24,7 +24,7 @@ The web server is now hosted on its own machine and handles static content, SSL 
 
 ### 3. Dedicated Application Server
 
-The application server runs backend logic — processing dynamic user requests, interacting with the database, and executing core functionality.
+The application server runs backend logic - processing dynamic user requests, interacting with the database, and executing core functionality.
 
 - **Why it’s added**: Isolating the app server allows for specialized scaling and performance tuning. Backend logic is typically more resource-intensive and benefits from separate handling.
 

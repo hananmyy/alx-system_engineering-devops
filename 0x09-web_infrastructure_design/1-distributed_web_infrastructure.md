@@ -16,8 +16,8 @@ The website `www.foobar.com` is resolved via DNS and handled by a load balancer,
 ### Load Balancer (HAProxy)
 - **Purpose**: Directs incoming traffic evenly across available servers to reduce load and improve uptime.
 - **Why Add It**: Prevents a single server from being overwhelmed. Enables fault tolerance if one app server fails.
-- **Distribution Algorithm**: **Round Robin** — requests are routed sequentially to each backend server in turn, ensuring an even load distribution.
-- **Setup Type**: **Active-Active** — both application servers are simultaneously live and handle requests in parallel.  
+- **Distribution Algorithm**: **Round Robin** - requests are routed sequentially to each backend server in turn, ensuring an even load distribution.
+- **Setup Type**: **Active-Active** - both application servers are simultaneously live and handle requests in parallel.  
   - *Active-Passive*, by contrast, keeps one server in standby mode and only activates it on failure.
 
 ### Web and Application Servers (2 Instances)
@@ -26,7 +26,7 @@ The website `www.foobar.com` is resolved via DNS and handled by a load balancer,
 - **Application Files**: Identical copies of the codebase are deployed to both servers for consistency.
 
 ### MySQL Database
-- **Purpose**: Stores structured data used by the application — user info, posts, transactions, etc.
+- **Purpose**: Stores structured data used by the application - user info, posts, transactions, etc.
 - **Optional Enhancement**: Primary-Replica Configuration (not required here but relevant for future scaling).
   - **Primary Node**: Accepts both read and write operations.
   - **Replica Node**: Receives real-time or near-real-time updates from the primary and supports read-only queries to distribute load.

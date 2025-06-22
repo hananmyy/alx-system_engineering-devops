@@ -2,7 +2,7 @@
 
 ## Overview
 
-This infrastructure consists of a **single server** configured to serve the website `www.foobar.com`. The setup includes a web server (Nginx), an application server, a codebase, and a MySQL database — all hosted on the same machine.
+This infrastructure consists of a **single server** configured to serve the website `www.foobar.com`. The setup includes a web server (Nginx), an application server, a codebase, and a MySQL database - all hosted on the same machine.
 
 ## Infrastructure Diagram
 ![Diagram Link](<task 0.png>)
