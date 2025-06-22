@@ -70,3 +70,29 @@ This architecture builds upon the distributed system by introducing HTTPS, firew
 - **Unencrypted internal traffic** if SSL is not re-initiated after termination.
 - **Single DB write node** still a SPOF for data integrity.
 - **Uniform component stacks** may lead to resource waste and complexity in future scaling.
+
+
+# Task 3: Scaled Web Infrastructure
+
+## Overview
+
+This setup introduces a clustered load balancer and splits core components — web server, application server, and database — across separate machines. This design improves fault tolerance, modularity, and scalability.
+
+## Components
+
+- **HAProxy (Load Balancer Cluster)**: Two HAProxy instances share responsibility for routing traffic, ensuring redundancy.
+- **Web Server (Nginx)**: Serves static files and forwards dynamic requests to the application server.
+- **Application Server (Gunicorn/uWSGI)**: Runs backend logic and handles communication with the database.
+- **MySQL Database**: Dedicated server for storing structured application data.
+
+## Load Balancing
+
+- **Algorithm**: Round Robin ensures even request distribution across layers.
+- **Setup**: Active-Active — both load balancers operate simultaneously with shared state.
+- **Scaling**: Each component (web, app, DB) can scale independently for performance tuning and fault isolation.
+
+## Issues
+
+- **Increased Complexity**: Requires more coordination between layers and services.
+- **Still a Single DB Write Node**: The database remains a bottleneck for writes unless replication or clustering is introduced.
+- **SSL Termination Considerations**: If HTTPS is terminated at the web server, internal app traffic may still be unencrypted.
