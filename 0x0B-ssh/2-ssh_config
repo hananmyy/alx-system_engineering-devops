@@ -1,0 +1,5 @@
+Host school
+  HostName 13.221.0.65
+  User ubuntu
+  IdentityFile ~/.ssh/school
+  PasswordAuthentication no
