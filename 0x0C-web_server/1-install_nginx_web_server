@@ -8,5 +8,10 @@ apt-get install nginx -y
 # Replace the default HTML page content with Hello World!
 echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
+# Ensure Nginx is listening on port 80 for both IPv4 and IPv6 (default config handles this)
+sed -i 's|listen 80 default_server;|listen 80 default_server;|' /etc/nginx/sites-available/default
+sed -i 's|listen \[::\]:80 default_server;|listen [::]:80 default_server;|' /etc/nginx/sites-available/default
+
+
 # Ensure nginx is started using the traditional service command
 service nginx start
