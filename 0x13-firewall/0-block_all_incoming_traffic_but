@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Installs UFW and configures it to allow only SSH, HTTP, and HTTPS
+
+# Install UFW
+apt-get update
+apt-get install -y ufw
+
+# Set default to deny all incoming traffic
+ufw default deny incoming
+
+# Allow specific TCP ports
+ufw allow 22/tcp
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# Enable UFW
+ufw --force enable
+
+# Show current status and rules
+ufw status verbose
