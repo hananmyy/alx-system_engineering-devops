@@ -11,4 +11,4 @@ SERVER_IP="$2"
 USERNAME="$3"
 SSH_KEY="$4"
 
-scp -o StrictHostKeyChecking=no -i "$SSH_KEY" "$FILE" "${USERNAME}@${SERVER_IP}:~/"
+sudo scp -o StrictHostKeyChecking=no -i "$SSH_KEY" "$FILE" "${USERNAME}@${SERVER_IP}:~/"

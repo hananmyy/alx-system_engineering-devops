@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 # Installs Nginx and configures it to return 'Hello World!' at the root endpoint
 
-# Update the package index and install nginx non-interactively
-apt-get update -y
-apt-get install nginx -y
+# Update the package index and install nginx
+sudo apt-get update -y
+sudo apt-get install nginx -y
 
-# Replace the default HTML page content with Hello World!
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
+# Replace the default HTML page with Hello World!
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
-# Ensure Nginx is listening on port 80 for both IPv4 and IPv6 (default config handles this)
-sed -i 's|listen 80 default_server;|listen 80 default_server;|' /etc/nginx/sites-available/default
-sed -i 's|listen \[::\]:80 default_server;|listen [::]:80 default_server;|' /etc/nginx/sites-available/default
+# Ensure Nginx is listening correctly (typically default is fine, these sed lines act as validation)
+sudo sed -i 's|listen 80 default_server;|listen 80 default_server;|' /etc/nginx/sites-available/default
+sudo sed -i 's|listen 
 
+\[::\]
 
-# Ensure nginx is started using the traditional service command
-service nginx start
+:80 default_server;|listen [::]:80 default_server;|' /etc/nginx/sites-available/default
+
+# Start Nginx
+sudo service nginx start
