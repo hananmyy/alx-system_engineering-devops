@@ -1,7 +1,28 @@
-# /etc/ufw/before.rules — Port forwarding configuration
+# rules.before
+#
+# Rules that should be run before the ufw command line rules. Custom port forwarding included.
+#
 
 # Port forwarding from 8080 to 80
 *nat
 :PREROUTING ACCEPT [0:0]
 -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+
+# Don't delete these required lines
+*filter
+:ufw-before-input - [0:0]
+:ufw-before-output - [0:0]
+:ufw-before-forward - [0:0]
+# Allow all loopback (lo0) traffic and drop invalid traffic
+-A ufw-before-input -i lo -j ACCEPT
+-A ufw-before-input -m conntrack --ctstate INVALID -j DROP
+# Accept all established inbound connections
+-A ufw-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# Allow SSH, HTTP and HTTPS
+-A ufw-before-input -p tcp --dport 22 -j ACCEPT
+-A ufw-before-input -p tcp --dport 80 -j ACCEPT
+-A ufw-before-input -p tcp --dport 443 -j ACCEPT
+# Drop everything else
+-A ufw-before-input -j DROP
 COMMIT
