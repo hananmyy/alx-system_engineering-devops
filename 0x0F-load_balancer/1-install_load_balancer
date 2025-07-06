@@ -2,17 +2,17 @@
 # Installs HAProxy and configures it to balance traffic between web-01 and web-02 using roundrobin
 
 # Update package list and install HAProxy
-apt-get update
-apt-get install -y haproxy
+sudo apt-get update
+sudo apt-get install -y haproxy
 
-# Ensure HAProxy is enabled in init system
-sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+# Enable HAProxy in init system
+sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
 
 # Backup the original HAProxy config
-cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
 
-# Write a new HAProxy configuration
-cat > /etc/haproxy/haproxy.cfg <<EOF
+# Write new HAProxy configuration
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOF
 global
     log /dev/log    local0
     log /dev/log    local1 notice
@@ -41,4 +41,4 @@ backend http_back
 EOF
 
 # Restart HAProxy to apply changes
-service haproxy restart
+sudo service haproxy restart
