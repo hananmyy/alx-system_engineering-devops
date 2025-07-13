@@ -1,0 +1,29 @@
+#!/bin/bash
+# Role: Load Balancer SSL Enforcement
+# Domain: firstvmlab.ddns.net
+
+# Step 1: HAProxy config update (located at /etc/haproxy/haproxy.cfg)
+# --- Added frontend block for HTTP to HTTPS redirection
+
+# Add this to the config file:
+
+# frontend http-in
+#     bind *:80
+#     redirect scheme https code 301 if !{ ssl_fc }
+
+# Step 2: Restarted HAProxy to apply changes
+sudo systemctl restart haproxy
+
+# Step 3: Test HTTP redirection
+curl -I http://firstvmlab.ddns.net
+# Expected output:
+# HTTP/1.1 301 Moved Permanently
+# Location: https://firstvmlab.ddns.net/
+
+# Step 4: Test HTTPS content
+curl -s https://firstvmlab.ddns.net
+# Expected to return backend content that includes: "ALX"
+
+# Confirmation
+# SSL redirection from HTTP to HTTPS works
+# Secure content served successfully via HAProxy frontend on port 443

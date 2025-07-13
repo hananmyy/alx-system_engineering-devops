@@ -1,0 +1,47 @@
+#!/bin/bash
+# Domain used: firstvmlab.ddns.net
+# VM roles:
+#   - firstvm: Load Balancer (IP 192.168.56.101)
+#   - backend1: Web Server 1 (IP 192.168.56.102)
+#   - backend2: Web Server 2 (IP 192.168.56.103)
+
+# Step 1: Registered free domain with No-IP
+# Hostname created: firstvmlab.ddns.net → pointed to public IP
+
+# Step 2: Simulated subdomains locally using /etc/hosts
+# Added the following lines:
+# 192.168.56.101  www.firstvmlab.ddns.net lb-01.firstvmlab.ddns.net
+# 192.168.56.102  web-01.firstvmlab.ddns.net
+# 192.168.56.103  web-02.firstvmlab.ddns.net
+
+# Step 3: Verified resolution locally with getent and curl
+# getent hosts www.firstvmlab.ddns.net → returned 192.168.56.101
+# curl www.firstvmlab.ddns.net → showed alternating backend responses
+
+# Step 4: Built DNS audit script using dig and awk
+
+# Ignore shellcheck SC2086
+audit_dns() {
+    dig $1.$2 | grep -A1 'ANSWER SECTION:' | awk 'NR==2 { print "The subdomain", "'"$1"'", "is a", $4, "record and points to", $5 }'
+}
+
+domain=$1
+subdomain=$2
+
+if [ -z "$domain" ]; then
+    echo "Usage: $0 domain [subdomain]"
+    exit 1
+fi
+
+if [ -z "$subdomain" ]; then
+    for sub in www lb-01 web-01 web-02; do
+        audit_dns "$sub" "$domain"
+    done
+else
+    audit_dns "$subdomain" "$domain"
+fi
+
+# Step 5: Tested script with:
+# ./0-world_wide_web firstvmlab.ddns.net
+# ./0-world_wide_web firstvmlab.ddns.net web-02
+# curl www.firstvmlab.ddns.net

@@ -1,0 +1,39 @@
+# VM: firstvm (Load Balancer)
+# Domain: firstvmlab.ddns.net
+
+# Step 1: Stopped HAProxy to free up port 80
+sudo systemctl stop haproxy
+
+# Step 2: Checked public IP to match with DNS
+curl ifconfig.me
+# Output: <Your Public IP>
+# Verified that No-IP hostname firstvmlab.ddns.net points to this IP
+
+# Step 3: Ran Certbot to generate certificate
+sudo certbot certonly --standalone -d firstvmlab.ddns.net
+
+# After success:
+# Cert files saved at /etc/letsencrypt/live/firstvmlab.ddns.net/
+
+# Step 4: Combined fullchain and privkey into haproxy.pem
+sudo bash -c 'cat /etc/letsencrypt/live/firstvmlab.ddns.net/fullchain.pem /etc/letsencrypt/live/firstvmlab.ddns.net/privkey.pem > /etc/ssl/private/haproxy.pem'
+
+# Step 5: HAProxy Config — /etc/haproxy/haproxy.cfg
+
+# Add this block:
+
+frontend https-in
+    bind *:443 ssl crt /etc/ssl/private/haproxy.pem
+    default_backend web-backends
+
+backend web-backends
+    balance roundrobin
+    server backend1 192.168.56.102:80 check
+    server backend2 192.168.56.103:80 check
+
+# Step 6: Restarted HAProxy
+sudo systemctl start haproxy
+
+# Step 7: Tested HTTPS response
+curl -s https://firstvmlab.ddns.net
+# Output: HTML page showing "ALX" (from backend)
